@@ -34,6 +34,10 @@ app.post('/create-event', async(req,res)=>{
   res.send(result);
 });
 
+app.get('/', (req,res)=>{
+  res.send({msg: "Successfully running"});
+})
+
 
 
 app.listen(PORT, ()=>{
