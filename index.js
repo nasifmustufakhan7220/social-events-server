@@ -45,6 +45,11 @@ app.get('/up-comming/:id', async(req,res)=>{
   const id = req.params.id;
   const result = await collection.findOne({_id: new ObjectId(id)});
   res.send(result);
+});
+
+app.get('/all', async(req,res)=>{
+  const result = await collection.find({}).toArray();
+  res.send(result);
 })
 
 app.get('/', (req,res)=>{
