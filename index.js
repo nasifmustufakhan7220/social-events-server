@@ -34,6 +34,13 @@ app.post('/create-event', async(req,res)=>{
   res.send(result);
 });
 
+app.get('/manage-event/:email',async(req,res)=>{
+  const email = req.params.email;
+  const result = await collection.find({userEmail: email}).toArray();
+  res.send(result);
+  console.log(result);
+})
+
 app.get('/', (req,res)=>{
   res.send({msg: "Successfully running"});
 })
