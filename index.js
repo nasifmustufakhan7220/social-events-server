@@ -45,8 +45,13 @@ app.patch('/manage-event/:id', async(req,res)=>{
   const id = req.params.id;
   const result = await collection.updateOne({_id: new ObjectId(id)}, {$set:updateData});
   res.send(result);
+});
 
+app.delete('/manage-delete/:id', async(req,res)=>{
+  const id = req.params.id;
+  const result = await collection.deleteOne({_id: new ObjectId(id)});
   console.log(id);
+  res.send(result);
 })
 
 app.get('/up-comming/:id', async(req,res)=>{
