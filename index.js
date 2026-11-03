@@ -38,8 +38,16 @@ app.get('/manage-event/:email',async(req,res)=>{
   const email = req.params.email;
   const result = await collection.find({userEmail: email}).toArray();
   res.send(result);
-  console.log(result);
 });
+
+app.patch('/manage-event/:id', async(req,res)=>{
+  const updateData = req.body;
+  const id = req.params.id;
+  const result = await collection.updateOne({_id: new ObjectId(id)}, {$set:updateData});
+  res.send(result);
+
+  console.log(id);
+})
 
 app.get('/up-comming/:id', async(req,res)=>{
   const id = req.params.id;
@@ -50,7 +58,7 @@ app.get('/up-comming/:id', async(req,res)=>{
 app.get('/all', async(req,res)=>{
   const result = await collection.find({}).toArray();
   res.send(result);
-})
+});
 
 app.get('/', (req,res)=>{
   res.send({msg: "Successfully running"});
