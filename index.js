@@ -51,9 +51,11 @@ app.patch('/manage-event/:id', async(req,res)=>{
 app.delete('/manage-delete/:id', async(req,res)=>{
   const id = req.params.id;
   const result = await collection.deleteOne({_id: new ObjectId(id)});
+  const deleteJoinedUser = await joinedUser.deleteOne({eventID: id});
   console.log(id);
   res.send(result);
 });
+
 
 app.post('/joined-users', async(req,res)=>{
   const joinedData = req.body;
