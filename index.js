@@ -104,7 +104,7 @@ app.delete('/joined-users/:id', async(req,res)=>{
   res.send(result);
 })
 
-app.get('/up-comming/:id', verifyToken, async(req,res)=>{
+app.get('/up-comming/:id', async(req,res)=>{
   const id = req.params.id;
   const result = await collection.findOne({_id: new ObjectId(id)});
   res.send(result);
