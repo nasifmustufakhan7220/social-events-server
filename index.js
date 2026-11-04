@@ -80,19 +80,19 @@ app.delete('/manage-delete/:id', async(req,res)=>{
 });
 
 
-app.post('/joined-users', async(req,res)=>{
+app.post('/joined-users', verifyToken, async(req,res)=>{
   const joinedData = req.body;
   const result = await joinedUser.insertOne(joinedData);
   res.send(result);
 });
 
-app.get('/joined-events/:id', async(req,res)=>{
+app.get('/joined-events/:id' ,async(req,res)=>{
   const id = req.params.id;
   const result = await joinedUser.find({eventID: id}).toArray();
   res.send(result);
 });
 
-app.get('/joined-users/:email', async(req,res)=>{
+app.get('/joined-users/:email', verifyToken ,async(req,res)=>{
   const email = req.params.email;
   const result = await joinedUser.find({userEmail: email}).toArray();
   res.send(result)
