@@ -52,7 +52,7 @@ const verifyToken = async(req,res,next)=>{
   }
 }
 
-app.post('/create-event', async(req,res)=>{
+app.post('/create-event', verifyToken, async(req,res)=>{
   const createEventData = req.body;
   const result = await collection.insertOne(createEventData);
   res.send(result);
