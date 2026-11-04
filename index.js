@@ -2,6 +2,7 @@ import express from "express";
 import cors from "cors";
 import "dotenv/config";
 import { MongoClient, ObjectId } from 'mongodb';
+import { createRemoteJWKSet, jwtVerify } from "jose";
 
 
 
@@ -28,6 +29,28 @@ const mongoClient = await connectToMongoDB();
 const db = mongoClient.db("socialEvenets");
 const collection = db.collection("events");
 const joinedUser = db.collection("joinedUsers");
+
+const verifyToken = async(req,res,next)=>{
+  const authHeaders = req.headers.authorization;
+
+  if(!authHeaders){
+    return res.status(401).send({msg: "Unauthorized"});
+  }
+
+  const token = authHeaders.split(" ")[1];
+
+  if(!token){
+    return res.status(401).send({msg: "Unauthorized"});
+  };
+
+  const JWKS = createRemoteJWKSet(new URL(`${process.env.CLIENT_URL}api/auth/jwks`));
+  try {
+    const {payload} = await jwtVerify(token, JWKS);
+    next();
+  } catch (error) {
+    return res.status(500).send({msg: "Server Error"});
+  }
+}
 
 app.post('/create-event', async(req,res)=>{
   const createEventData = req.body;
@@ -81,7 +104,7 @@ app.delete('/joined-users/:id', async(req,res)=>{
   res.send(result);
 })
 
-app.get('/up-comming/:id', async(req,res)=>{
+app.get('/up-comming/:id', verifyToken, async(req,res)=>{
   const id = req.params.id;
   const result = await collection.findOne({_id: new ObjectId(id)});
   res.send(result);
