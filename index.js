@@ -27,6 +27,7 @@ const mongoClient = await connectToMongoDB();
 
 const db = mongoClient.db("socialEvenets");
 const collection = db.collection("events");
+const joinedUser = db.collection("joinedUsers");
 
 app.post('/create-event', async(req,res)=>{
   const createEventData = req.body;
@@ -51,6 +52,30 @@ app.delete('/manage-delete/:id', async(req,res)=>{
   const id = req.params.id;
   const result = await collection.deleteOne({_id: new ObjectId(id)});
   console.log(id);
+  res.send(result);
+});
+
+app.post('/joined-users', async(req,res)=>{
+  const joinedData = req.body;
+  const result = await joinedUser.insertOne(joinedData);
+  res.send(result);
+});
+
+app.get('/joined-events/:id', async(req,res)=>{
+  const id = req.params.id;
+  const result = await joinedUser.find({eventID: id}).toArray();
+  res.send(result);
+});
+
+app.get('/joined-users/:email', async(req,res)=>{
+  const email = req.params.email;
+  const result = await joinedUser.find({userEmail: email}).toArray();
+  res.send(result)
+});
+
+app.delete('/joined-users/:id', async(req,res)=>{
+  const id = req.params.id;
+  const result = await joinedUser.deleteOne({_id: new ObjectId(id)});
   res.send(result);
 })
 
