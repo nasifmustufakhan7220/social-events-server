@@ -58,20 +58,20 @@ app.post('/create-event', verifyToken, async(req,res)=>{
   res.send(result);
 });
 
-app.get('/manage-event/:email',async(req,res)=>{
+app.get('/manage-event/:email',verifyToken, async(req,res)=>{
   const email = req.params.email;
   const result = await collection.find({userEmail: email}).toArray();
   res.send(result);
 });
 
-app.patch('/manage-event/:id', async(req,res)=>{
+app.patch('/manage-event/:id', verifyToken ,async(req,res)=>{
   const updateData = req.body;
   const id = req.params.id;
   const result = await collection.updateOne({_id: new ObjectId(id)}, {$set:updateData});
   res.send(result);
 });
 
-app.delete('/manage-delete/:id', async(req,res)=>{
+app.delete('/manage-delete/:id', verifyToken ,async(req,res)=>{
   const id = req.params.id;
   const result = await collection.deleteOne({_id: new ObjectId(id)});
   const deleteJoinedUser = await joinedUser.deleteOne({eventID: id});
@@ -86,7 +86,7 @@ app.post('/joined-users', verifyToken, async(req,res)=>{
   res.send(result);
 });
 
-app.get('/joined-events/:id' ,async(req,res)=>{
+app.get('/joined-events/:id', verifyToken, async(req,res)=>{
   const id = req.params.id;
   const result = await joinedUser.find({eventID: id}).toArray();
   res.send(result);
@@ -98,7 +98,7 @@ app.get('/joined-users/:email', verifyToken ,async(req,res)=>{
   res.send(result)
 });
 
-app.delete('/joined-users/:id', async(req,res)=>{
+app.delete('/joined-users/:id', verifyToken, async(req,res)=>{
   const id = req.params.id;
   const result = await joinedUser.deleteOne({_id: new ObjectId(id)});
   res.send(result);
