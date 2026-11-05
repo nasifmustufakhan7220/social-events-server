@@ -110,7 +110,7 @@ app.get('/up-comming/:id', async(req,res)=>{
   res.send(result);
 });
 
-app.get('/all', async(req,res)=>{
+app.get('/all',async(req,res)=>{
   const result = await collection.find({}).toArray();
   res.send(result);
 });
